@@ -40,39 +40,38 @@ pip install checkov
 ```Bash
 aws configure
 ```
+> Recommendation: Utilize IAM Identity Center authentication with the AWS CLI
+
 4. Initialize Project Structure: Create the file structure for the Terraform code (.tf files) in the src/ directory.
 
 ## Phase 2: Secure Code Baseline and Policy Enforcement
 All Terraform files were written in the src/ directory to provision the following secure resources:
 
-Resource	Security Feature Enforced
-VPC & Subnets	Separate Public Subnets (for ALB) and Private Subnets (for RDS).
-Security Groups (SGs)	Least Privilege: SG for RDS only permits traffic from the ALB's SG, not from broad CIDR ranges.
-RDS Database	Encryption at Rest: storage_encrypted = true. Forced deployment into Private Subnets.
-IAM Role	Least Privilege: Custom policy that grants only necessary access to the application layer.
+|Resource |	Security Feature Enforced |
+|VPC & Subnets |	Separate Public Subnets (for ALB) and Private Subnets (for RDS). |
+|Security | Groups (SGs)	Least Privilege: SG for RDS only permits traffic from the ALB's SG, not from broad CIDR ranges. |
+|RDS Database |	Encryption at Rest: storage_encrypted = true. Forced deployment into Private Subnets. |
+|IAM Role |	Least Privilege: Custom policy that grants only necessary access to the application layer. |
 
 The Security Gate Test (Vulnerability Discovery)
 To prove the value of the security scanner, the RDS resource was intentionally configured insecurely (e.g., setting storage_encrypted = false).
 
 Run Checkov Scan:
 
-Bash
-
+```Bash
 checkov -d src/
 Result: Failed Check ❌
-
+```
 (Artifact to include: Screenshot 1 of Checkov FAIL output, showing the specific Checkov ID (e.g., CKV_AWS_157) failing the unencrypted RDS check.)
 
 Remediation and Validation
 The insecure configuration was remediated by changing storage_encrypted back to true in the RDS resource block.
 
 Re-Run Checkov Scan:
-
-Bash
-
+```Bash
 checkov -d src/
 Result: Passed Checks ✅
-
+```
 (Artifact to include: Screenshot 2 of Checkov PASS output, confirming the code is now compliant with best practices.)
 
 ## Phase 3: Deployment and Cleanup
