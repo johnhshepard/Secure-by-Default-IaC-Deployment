@@ -47,7 +47,8 @@ aws configure
 ## Phase 2: Secure Code Baseline and Policy Enforcement
 All Terraform files were written in the src/ directory to provision the following secure resources:
 
-|Resource |	Security Feature Enforced |
+|**Resource** |	**Security Feature Enforced** |
+| ----------- | ----------------------------- |
 |VPC & Subnets |	Separate Public Subnets (for ALB) and Private Subnets (for RDS). |
 |Security | Groups (SGs)	Least Privilege: SG for RDS only permits traffic from the ALB's SG, not from broad CIDR ranges. |
 |RDS Database |	Encryption at Rest: storage_encrypted = true. Forced deployment into Private Subnets. |
@@ -77,28 +78,28 @@ Result: Passed Checks ✅
 ## Phase 3: Deployment and Cleanup
 Initialize & Validate:
 
-Bash
-
+```Bash
 terraform init
 terraform validate
+```
 Deploy Final Infrastructure: The secure baseline is deployed to AWS.
 
-Bash
-
+```Bash
 terraform apply --auto-approve
+```
 Cleanup (Crucial): All deployed resources are destroyed to prevent recurring AWS charges.
 
-Bash
-
+```Bash
 terraform destroy --auto-approve
+```
 2. GitHub Workflow and Artifacts
 The following steps ensured the project is professionally presented:
 
 Git Initialization:
 
-Bash
-
+```Bash
 git init
+```
 Secure .gitignore: A .gitignore file was created to prevent committing sensitive files, most importantly the Terraform state file (*.tfstate) and local credentials.
 
 # .gitignore content:
