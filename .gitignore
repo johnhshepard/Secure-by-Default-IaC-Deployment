@@ -1,0 +1,4 @@
+src/.terraform/
+*.tfstate*
+.terraform.lock.hcl
+credentials.csv
