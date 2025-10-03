@@ -63,7 +63,7 @@ Run Checkov Scan:
 checkov -d src/
 Result: Failed Check ❌
 ```
-(Artifact to include: Screenshot 1 of Checkov FAIL output, showing the specific Checkov ID (e.g., CKV_AWS_157) failing the unencrypted RDS check.)
+- Artifact: Screenshot 1 of Checkov FAIL output, showing the Checkov ID CKR_AWS_16.
 
 ![Artifact 1: Screenshot 1 of Checkov FAIL output](/docs/CKV_AWS_16-Failed.png)
 

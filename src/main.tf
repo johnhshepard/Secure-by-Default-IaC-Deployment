@@ -93,7 +93,7 @@ resource "aws_db_instance" "app_db" {
 
   # SECURITY CONTROL 2 (Encryption): *** INTENTIONALLY INSECURE FOR FIRST SCAN ***
   # Change this to 'false' for the first Checkov scan:
-  storage_encrypted       = false
+  storage_encrypted       = true    # CHANGED TO TRUE!
 
   # Credentials (using variables for security)
   username                = var.db_username
