@@ -65,6 +65,8 @@ Result: Failed Check ❌
 ```
 (Artifact to include: Screenshot 1 of Checkov FAIL output, showing the specific Checkov ID (e.g., CKV_AWS_157) failing the unencrypted RDS check.)
 
+![Artifact 1: Screenshot 1 of Checkov FAIL output](/docs/CKV_AWS_16-Failed.png)
+
 Remediation and Validation
 The insecure configuration was remediated by changing storage_encrypted back to true in the RDS resource block.
 
