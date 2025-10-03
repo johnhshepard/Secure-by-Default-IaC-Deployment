@@ -63,9 +63,9 @@ Run Checkov Scan:
 checkov -d src/
 Result: Failed Check ❌
 ```
-- Artifact: Screenshot 1 of Checkov FAIL output, showing the Checkov ID CKR_AWS_16.
+- Artifact: Screenshot of Checkov FAIL output, showing the Checkov ID CKR_AWS_16.
 
-![Artifact 1: Screenshot 1 of Checkov FAIL output](/docs/CKV_AWS_16-Failed.png)
+![Artifact 1: Screenshot of Checkov FAIL output](/docs/CKV_AWS_16-Failed.png)
 
 Remediation and Validation
 The insecure configuration was remediated by changing storage_encrypted back to true in the RDS resource block.
@@ -75,7 +75,9 @@ Re-Run Checkov Scan:
 checkov -d src/
 Result: Passed Checks ✅
 ```
-(Artifact to include: Screenshot 2 of Checkov PASS output, confirming the code is now compliant with best practices.)
+- Artifact: Screenshot of Checkov PASS output, showing the Checkov ID CKR_AWS_16.
+
+![Artifact 2: Screenshot of Checkov PASS output](/docs/CKV_AWS_16-Passed.png)
 
 ## Phase 3: Deployment and Cleanup
 Initialize & Validate:
