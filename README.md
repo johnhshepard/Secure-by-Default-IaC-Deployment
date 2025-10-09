@@ -96,22 +96,24 @@ Cleanup (Crucial): All deployed resources are destroyed to prevent recurring AWS
 ```Bash
 terraform destroy --auto-approve
 ```
-2. GitHub Workflow and Artifacts
+# 2. GitHub Workflow and Artifacts
 The following steps ensured the project is professionally presented:
 
-Git Initialization:
+### 1. Git Initialization:
 
 ```Bash
 git init
 ```
-Secure .gitignore: A .gitignore file was created to prevent committing sensitive files, most importantly the Terraform state file (*.tfstate) and local credentials.
+### 2. Secure .gitignore: A .gitignore file was created to prevent committing sensitive files, most importantly the Terraform state file (*.tfstate) and local credentials.
 
-# .gitignore content:
+.gitignore content:
+```Bash
 .terraform/
 *.tfstate*
 .terraform.lock.hcl
 credentials.csv
-Commit and Push: The final, secure Terraform code and documentation were committed and pushed to this repository.
+```
+### 3. Commit and Push: The final, secure Terraform code and documentation were committed and pushed to this repository.
 
 # Project Artifacts (Evidence)
 The following files serve as verifiable evidence of project completion:

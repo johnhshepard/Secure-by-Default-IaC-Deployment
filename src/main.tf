@@ -10,6 +10,8 @@ terraform {
 provider "aws" {
   region = var.region
 }
+
+## Networking and Segmentation
 # 1. VPC (The isolated network)
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
@@ -33,13 +35,21 @@ resource "aws_subnet" "private_a" {
   availability_zone = "${var.region}a"
   tags = { Name = "private-a" }
 }
-# (Repeat for another AZ, e.g., private_b, to ensure multi-AZ resilience)
+resource "aws_subnet" "private_b" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.20.0/24"
+  availability_zone = "${var.region}a"
+  tags = { Name = "private-a" }
+}
+# IMPROVE: (Repeat for another AZ, e.g., private_b, to ensure multi-AZ resilience)
 
 # 4. Internet Gateway (For public subnet traffic)
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
   tags = { Name = "main-igw" }
 }
+
+## Security Groups
 # 1. Security Group for the Application Load Balancer (ALB)
 resource "aws_security_group" "alb_sg" {
   name        = "alb-sg"
@@ -77,10 +87,14 @@ resource "aws_security_group" "rds_sg" {
     security_groups = [aws_security_group.alb_sg.id] # Source is the ALB SG, NOT 0.0.0.0/0
   }
 }
+
+## RDS Subnet Group
 resource "aws_db_subnet_group" "default" {
   name       = "db-subnet-group"
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id] # Use your private subnets
 }
+
+## RDS Instance
 resource "aws_db_instance" "app_db" {
   identifier              = "app-database"
   instance_class          = "db.t3.micro"
@@ -100,4 +114,42 @@ resource "aws_db_instance" "app_db" {
   password                = var.db_password
   allocated_storage       = 20
   skip_final_snapshot     = true
+}
+
+resource "aws_iam_role" "app_role" {
+  name = "secure_app_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com" # Example service principal
+        }
+      },
+    ]
+  })
+  tags = { Name = "LeastPrivilegeRole" }
+}
+
+# Example: A least-privilege policy allowing read-only access to S3
+resource "aws_iam_policy" "read_only_policy" {
+  name        = "app_s3_read_only"
+  description = "Allows read-only access to specific S3 data"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action   = ["s3:GetObject", "s3:ListBucket"]
+        Effect   = "Allow"
+        Resource = ["arn:aws:s3:::app-data-bucket/*", "arn:aws:s3:::app-data-bucket"]
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_read_only" {
+  role       = aws_iam_role.app_role.name
+  policy_arn = aws_iam_policy.read_only_policy.arn
 }
